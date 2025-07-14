@@ -20,7 +20,7 @@ class BackgroundSection extends StatelessWidget {
           Container(
             color: Colors.black.withOpacity(0.3),
           ),
-          
+
           // Background image
           Center(
             child: Container(
@@ -32,7 +32,7 @@ class BackgroundSection extends StatelessWidget {
                   image: AssetImage('assets/images/background.jpg'),
                   fit: BoxFit.cover,
                 ),
-                // Add shadow 
+                // Add shadow
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.3),
@@ -41,7 +41,7 @@ class BackgroundSection extends StatelessWidget {
                   ),
                 ],
               ),
-              //  Add overlay 
+              //  Add overlay
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),

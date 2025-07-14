@@ -38,21 +38,6 @@ class WelcomeSection extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 12),
-                  Text(
-                    'Log in to manage your finances',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white.withOpacity(0.9),
-                      fontWeight: FontWeight.w400,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black.withOpacity(0.3),
-                          offset: Offset(1, 1),
-                          blurRadius: 2,
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

@@ -50,18 +50,25 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           BackgroundSection(),
           SafeArea(
-            child: Column(children: [
-              TopBarSection(),
-              WelcomeSection(
-                fadeAnimation: _fadeAnimation,
-                slideAnimation: _slideAnimation,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Column(
+                children: [
+                  TopBarSection(),
+                  WelcomeSection(
+                    fadeAnimation: _fadeAnimation,
+                    slideAnimation: _slideAnimation,
+                  ),
+                  const SizedBox(height: 275),
+                  const LoginForm(),
+                ],
               ),
-              LoginForm(),
-            ]),
+            ),
           ),
         ],
       ),
