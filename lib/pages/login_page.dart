@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scb_login_page/widgets/login_form.dart';
+import 'package:scb_login/widgets/login_form.dart';
 import '../widgets/background_section.dart';
 import '../widgets/top_bar_section.dart';
 import '../widgets/welcome_section.dart';
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     ));
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
+      begin: Offset(0, 0.3),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _animationController,
@@ -49,25 +49,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           BackgroundSection(),
           SafeArea(
-            child: Column(
-              children: [
-                TopBarSection(),
-                // WelcomeSection(
-                //   fadeAnimation: _fadeAnimation,
-                //   slideAnimation: _slideAnimation,
-                // ),
-                // Expanded(
-                //   child: Container(),
-                // ),
-
-                LoginForm(),
-              ],
-            ),
+            child: Column(children: [
+              TopBarSection(),
+              WelcomeSection(
+                fadeAnimation: _fadeAnimation,
+                slideAnimation: _slideAnimation,
+              ),
+              LoginForm(),
+            ]),
           ),
         ],
       ),

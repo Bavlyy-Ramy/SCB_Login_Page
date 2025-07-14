@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:scb_login_page/pages/login_page.dart';
-import 'package:scb_login_page/widgets/login_form.dart';
+import 'pages/login_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,3 +15,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
