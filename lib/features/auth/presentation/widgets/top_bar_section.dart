@@ -5,7 +5,8 @@ class TopBarSection extends StatefulWidget {
   _TopBarSectionState createState() => _TopBarSectionState();
 }
 
-class _TopBarSectionState extends State<TopBarSection> with TickerProviderStateMixin {
+class _TopBarSectionState extends State<TopBarSection>
+    with TickerProviderStateMixin {
   bool isArabic = true;
   late AnimationController _languageAnimationController;
   late Animation<double> _languageAnimation;
@@ -73,20 +74,13 @@ class _TopBarSectionState extends State<TopBarSection> with TickerProviderStateM
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
-                'assets/images/unnamed.webp',
+                'assets/images/SCB logo.png',
                 fit: BoxFit.contain,
               ),
             ),
@@ -104,7 +98,8 @@ class _TopBarSectionState extends State<TopBarSection> with TickerProviderStateM
                     return Transform.scale(
                       scale: 1.0 + (_languageAnimation.value * 0.1),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),

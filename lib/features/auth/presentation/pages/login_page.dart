@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scb_login/widgets/login_form.dart';
+import 'package:scb_login/features/auth/presentation/widgets/login_form.dart';
 import '../widgets/background_section.dart';
 import '../widgets/top_bar_section.dart';
 import '../widgets/welcome_section.dart';
@@ -58,13 +58,17 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             child: SingleChildScrollView(
               padding: const EdgeInsets.only(bottom: 20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TopBarSection(),
-                  WelcomeSection(
-                    fadeAnimation: _fadeAnimation,
-                    slideAnimation: _slideAnimation,
+                  const SizedBox(height: 340),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: WelcomeSection(
+                      fadeAnimation: _fadeAnimation,
+                      slideAnimation: _slideAnimation,
+                    ),
                   ),
-                  const SizedBox(height: 275),
                   const LoginForm(),
                 ],
               ),
