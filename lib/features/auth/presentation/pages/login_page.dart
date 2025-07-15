@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scb_login/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:scb_login/features/auth/presentation/widgets/login_form.dart';
+import 'package:scb_login/injection_container.dart';
 import '../widgets/background_section.dart';
 import '../widgets/top_bar_section.dart';
 import '../widgets/welcome_section.dart';
@@ -72,7 +73,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     ),
                   ),
                   BlocProvider(
-                    create: (context) => LoginCubit(),
+                    create: (context) => sl<LoginCubit>(),
                     child: const LoginForm(),
                   ),
                 ],
