@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scb_login/core/utils/user_storage_helper.dart';
+import 'package:scb_login/features/auth/data/models/user_model.dart';
 import 'package:scb_login/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:scb_login/features/auth/presentation/widgets/login_form.dart';
 import 'package:scb_login/injection_container.dart';
@@ -16,6 +18,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+
+
 
   @override
   void initState() {

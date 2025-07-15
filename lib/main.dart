@@ -4,7 +4,8 @@ import 'features/auth/presentation/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await init(); 
+  await initHive(); // 🔧 Hive first
+  await init();     // 📦 Then DI
   runApp(const MyApp());
 }
 

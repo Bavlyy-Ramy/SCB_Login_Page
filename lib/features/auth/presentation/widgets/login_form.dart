@@ -1,7 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scb_login/core/utils/UserJsonExporter.dart';
+import 'package:scb_login/core/utils/user_storage_helper.dart';
+import 'package:scb_login/features/auth/data/models/user_model.dart';
 import 'package:scb_login/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:scb_login/features/auth/presentation/pages/forget_password_page.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -129,7 +133,26 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     const SizedBox(height: 6),
                     GestureDetector(
-                      //onTap: ,
+                      onTap: () async {
+                        final newUser = UserModel(
+                          id: '1',
+                          name: 'Alice',
+                          email: 'alice@example.com',
+                          password: 'pass123',
+                        );
+
+                        await UserStorageHelper.saveUser(newUser);
+                        print('✅ User saved to Hive');
+
+                        await UserJsonExporter.exportUsersToJsonFile();
+
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const ForgotPasswordPage()),
+                        );
+                      },
                       child: Container(
                         width: 380,
                         child: const Row(
