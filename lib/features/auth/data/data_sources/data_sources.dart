@@ -1,10 +1,16 @@
-import 'package:flutter/material.dart';
+import '../../../../core/mocks/login_mock.dart';
 
-class DataSources extends StatelessWidget {
-  const DataSources({super.key});
+abstract class LoginRemoteDataSource {
+  Future<Map<String, dynamic>> login({required String username, required String password});
+}
 
+class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+  Future<Map<String, dynamic>> login({required String username, required String password}) async {
+    if (username == 'bavly') {
+      return await LoginMock.loginSuccess();
+    } else {
+      return await LoginMock.loginFailure();
+    }
   }
 }

@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
+import '../../domain/entities/entites.dart';
 
-class Models extends StatelessWidget {
-  const Models({super.key});
+class UserModel extends UserEntity {
+  UserModel({required super.id, required super.username});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'],
+      username: json['username'],
+    );
   }
 }
