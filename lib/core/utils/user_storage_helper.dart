@@ -16,6 +16,37 @@ class UserStorageHelper {
     return box.get(id);
   }
 
+static bool validateLogin(String email, String password) {
+  final box = Hive.box<UserModel>(_boxName);
+  try {
+    return box.values.any(
+      (user) => user.email == email && user.password == password,
+    );
+  } catch (_) {
+    return false;
+  }
+}
+
+static Future<bool> resetPassword({
+  required String email,
+  required String newPassword,
+}) async {
+  final box = Hive.box<UserModel>(_boxName);
+  final userList = box.values.toList();
+
+  for (var user in userList) {
+    if (user.email == email) {
+      final updatedUser = user.copyWith(password: newPassword);
+      await box.put(user.id, updatedUser);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+
   /// Get all saved users
   static List<UserModel> getAllUsers() {
     final box = Hive.box<UserModel>(_boxName);

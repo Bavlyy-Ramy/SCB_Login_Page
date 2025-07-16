@@ -32,7 +32,7 @@ sl.registerFactory(() => LoginCubit(
   offlineLoginUseCase: sl(),
 ));
 
-sl.registerLazySingleton(() => LoginUseCase(sl()));
+sl.registerLazySingleton(() => LoginUseCase());
 sl.registerLazySingleton(() => OfflineLoginUseCase(sl()));
 sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
 

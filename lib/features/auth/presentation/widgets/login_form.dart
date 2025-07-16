@@ -17,12 +17,12 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   bool obscurePassword = true;
   final formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   @override
   void dispose() {
-    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -77,11 +77,11 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
-                      controller: usernameController,
+                      controller: emailController,
                       style: const TextStyle(color: Colors.black),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
+                          return 'Please enter your Email';
                         } else {
                           return null;
                         }
@@ -93,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
-                        labelText: 'Username',
+                        labelText: 'Email',
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -134,17 +134,17 @@ class _LoginFormState extends State<LoginForm> {
                     const SizedBox(height: 6),
                     GestureDetector(
                       onTap: () async {
-                        final newUser = UserModel(
-                          id: '1',
-                          name: 'Alice',
-                          email: 'alice@example.com',
-                          password: 'pass123',
-                        );
+                        // final newUser = UserModel(
+                        //   id: '2',
+                        //   name: 'Bavly',
+                        //   email: 'bavly@gmail.com',
+                        //   password: 'bavly123',
+                        // );
 
-                        await UserStorageHelper.saveUser(newUser);
-                        print('✅ User saved to Hive');
+                        // await UserStorageHelper.saveUser(newUser);
+                        // print('✅ User saved to Hive');
 
-                        await UserJsonExporter.exportUsersToJsonFile();
+                        // await UserJsonExporter.exportUsersToJsonFile();
 
 
                         Navigator.push(
@@ -235,14 +235,14 @@ class _LoginFormState extends State<LoginForm> {
     return GestureDetector(
       onTap: () {
         if (formKey.currentState!.validate()) {
-          final username = usernameController.text;
+          final email = emailController.text;
           final password = passwordController.text;
-          log('Logging in with $username and $password');
+          log('Logging in with $email and $password');
 
           if (isOnline) {
             context
                 .read<LoginCubit>()
-                .login(username: username, password: password);
+                .login(username: email, password: password);
           } else {
             context.read<LoginCubit>().offlineLogin();
           }

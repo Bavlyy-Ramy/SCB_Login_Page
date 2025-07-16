@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scb_login/features/auth/presentation/widgets/background_section.dart';
+import 'package:scb_login/core/utils/user_storage_helper.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -16,18 +17,39 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   void dispose() {
     emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
-  void submitReset() {
-    if (formKey.currentState!.validate()) {
-      final email = emailController.text.trim();
-      // Call your Cubit or Repository method here
-      // Example: context.read<LoginCubit>().sendPasswordResetEmail(email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password reset link sent to $email')),
-      );
-    }
+  Future<void> resetPassword() async {
+    if (!formKey.currentState!.validate()) return;
+
+    final email = emailController.text.trim();
+    final newPassword = passwordController.text;
+
+    final success = await UserStorageHelper.resetPassword(
+      email: email,
+      newPassword: newPassword,
+    );
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(success ? 'Success' : 'Error'),
+        content: Text(success
+            ? 'Password reset successfully.'
+            : 'No user found with that email.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (success) Navigator.pop(context);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -60,7 +82,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          iconColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.0),
                           ),
@@ -76,36 +97,34 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       TextFormField(
                         controller: passwordController,
-                        keyboardType: TextInputType.visiblePassword,
+                       
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          iconColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          labelText: 'New password',
+                          labelText: 'New Password',
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
+                            return 'Please enter a new password';
                           }
-                          if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                            return 'Please enter a valid email';
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 24),
-                      Container(
-                        decoration: BoxDecoration(),
+                      SizedBox(
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: submitReset,
+                          onPressed: resetPassword,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF01528c),
                             foregroundColor: Colors.white,
