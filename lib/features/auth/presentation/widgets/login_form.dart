@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scb_login/features/auth/presentation/cubit/login_cubit.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  final VoidCallback onSwitchToRegister;
+
+  const LoginForm({super.key, required this.onSwitchToRegister});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -44,8 +46,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-          showCustomDialog(
-              context, 'Success', 'You have logged in successfully');
+          showCustomDialog(context, 'Success', 'You have logged in successfully');
         } else if (state is LoginFailure) {
           showCustomDialog(context, 'Failure', state.erroMsg);
         }
@@ -67,9 +68,10 @@ class _LoginFormState extends State<LoginForm> {
                     const Text(
                       'Log in to manage your finances',
                       style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
@@ -78,14 +80,12 @@ class _LoginFormState extends State<LoginForm> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your username';
-                        } else {
-                          return null;
                         }
+                        return null;
                       },
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        iconColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
@@ -100,9 +100,8 @@ class _LoginFormState extends State<LoginForm> {
                           return 'Please enter your Password';
                         } else if (value.length < 6) {
                           return 'Password must be at least 6 characters';
-                        } else {
-                          return null;
                         }
+                        return null;
                       },
                       obscureText: obscurePassword,
                       decoration: InputDecoration(
@@ -114,9 +113,7 @@ class _LoginFormState extends State<LoginForm> {
                         labelText: 'Password',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                            obscurePassword ? Icons.visibility : Icons.visibility_off,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -129,8 +126,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     const SizedBox(height: 6),
                     GestureDetector(
-                      //onTap: ,
-                      child: Container(
+                      child: SizedBox(
                         width: 380,
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -146,7 +142,7 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         logInBtn(
@@ -160,16 +156,14 @@ class _LoginFormState extends State<LoginForm> {
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                              color: const Color(0xFF01528c),
-                              borderRadius: BorderRadius.circular(16)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/icons/face-id.png',
-                                scale: 1.2,
-                              ),
-                            ],
+                            color: const Color(0xFF01528c),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              'assets/icons/face-id.png',
+                              scale: 1.2,
+                            ),
                           ),
                         ),
                       ],
@@ -181,18 +175,24 @@ class _LoginFormState extends State<LoginForm> {
                       isLoading: isFailLoading,
                       isOnline: false,
                     ),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Register",
-                          style: TextStyle(
+                    const SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: widget.onSwitchToRegister,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Register",
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ],
-                    )
+                              color: Colors.white,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -217,9 +217,7 @@ class _LoginFormState extends State<LoginForm> {
           log('Logging in with $username and $password');
 
           if (isOnline) {
-            context
-                .read<LoginCubit>()
-                .login(username: username, password: password);
+            context.read<LoginCubit>().login(username: username, password: password);
           } else {
             context.read<LoginCubit>().offlineLogin();
           }

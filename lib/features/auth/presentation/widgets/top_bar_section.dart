@@ -86,7 +86,6 @@ class _TopBarSectionState extends State<TopBarSection>
             ),
           ),
 
-          // Right controls
           Row(
             children: [
               // Language switch with animation
