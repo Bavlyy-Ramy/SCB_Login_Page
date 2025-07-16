@@ -1,11 +1,7 @@
-import 'package:scb_login/features/auth/domain/repositories/auth_repository.dart';
+import 'package:scb_login/core/utils/user_storage_helper.dart';
 
 class LoginUseCase {
-  final AuthRepository repository;
-
-  LoginUseCase(this.repository);
-
-  Future<bool> call(String username, String password) async {
-    return await repository.login(username, password);
+  Future<bool> call(String email, String password) async {
+    return UserStorageHelper.validateLogin(email, password);
   }
 }

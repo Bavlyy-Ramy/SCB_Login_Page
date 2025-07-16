@@ -1,7 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scb_login/core/utils/UserJsonExporter.dart';
+import 'package:scb_login/core/utils/user_storage_helper.dart';
+import 'package:scb_login/features/auth/data/models/user_model.dart';
 import 'package:scb_login/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:scb_login/features/auth/presentation/pages/forget_password_page.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -13,12 +17,12 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   bool obscurePassword = true;
   final formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   @override
   void dispose() {
-    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -73,11 +77,11 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
-                      controller: usernameController,
+                      controller: emailController,
                       style: const TextStyle(color: Colors.black),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
+                          return 'Please enter your Email';
                         } else {
                           return null;
                         }
@@ -89,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
-                        labelText: 'Username',
+                        labelText: 'Email',
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -129,7 +133,26 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     const SizedBox(height: 6),
                     GestureDetector(
-                      //onTap: ,
+                      onTap: () async {
+                        // final newUser = UserModel(
+                        //   id: '2',
+                        //   name: 'Bavly',
+                        //   email: 'bavly@gmail.com',
+                        //   password: 'bavly123',
+                        // );
+
+                        // await UserStorageHelper.saveUser(newUser);
+                        // print('✅ User saved to Hive');
+
+                        // await UserJsonExporter.exportUsersToJsonFile();
+
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const ForgotPasswordPage()),
+                        );
+                      },
                       child: Container(
                         width: 380,
                         child: const Row(
@@ -212,14 +235,14 @@ class _LoginFormState extends State<LoginForm> {
     return GestureDetector(
       onTap: () {
         if (formKey.currentState!.validate()) {
-          final username = usernameController.text;
+          final email = emailController.text;
           final password = passwordController.text;
-          log('Logging in with $username and $password');
+          log('Logging in with $email and $password');
 
           if (isOnline) {
             context
                 .read<LoginCubit>()
-                .login(username: username, password: password);
+                .login(username: email, password: password);
           } else {
             context.read<LoginCubit>().offlineLogin();
           }
