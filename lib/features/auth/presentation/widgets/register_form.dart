@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scb_login/core/utils/user_storage_helper.dart';
+import 'package:scb_login/features/auth/data/models/user_model.dart';
 
 class RegisterForm extends StatefulWidget {
   final VoidCallback onSwitchToLogin;
@@ -86,21 +88,38 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
             const SizedBox(height: 16),
             buildField(controller: fullNameController, label: 'Full Name'),
-            buildField(controller: emailController, label: 'Email', type: TextInputType.emailAddress),
-            buildField(controller: phoneController, label: 'Phone Number', type: TextInputType.phone),
-            buildField(controller: nationalIdController, label: 'National ID', type: TextInputType.number),
+            buildField(
+                controller: emailController,
+                label: 'Email',
+                type: TextInputType.emailAddress),
+            buildField(
+                controller: nationalIdController,
+                label: 'National ID',
+                type: TextInputType.number),
             buildPasswordField(passwordController, 'Password', true),
-            buildPasswordField(confirmPasswordController, 'Confirm Password', false),
+            buildPasswordField(
+                confirmPasswordController, 'Confirm Password', false),
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF01528c),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  showSuccessDialog(); //  Show success dialog
+                  final newUser = UserModel(
+                    id: nationalIdController.text,
+                    name: fullNameController.text.trim(),
+                    email: emailController.text.trim(),
+                    password: passwordController.text,
+                  );
+
+                  await UserStorageHelper.saveUser(
+                      newUser); // ✅ Save user to Hive
+                  showSuccessDialog(); // ✅ Show success dialog
                 }
               },
               child: const Text(
@@ -112,7 +131,10 @@ class _RegisterFormState extends State<RegisterForm> {
               onPressed: widget.onSwitchToLogin,
               child: const Text(
                 'Already have an account? Log in',
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
               ),
             ),
           ],
@@ -140,7 +162,8 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-  Widget buildPasswordField(TextEditingController controller, String label, bool isMainPassword) {
+  Widget buildPasswordField(
+      TextEditingController controller, String label, bool isMainPassword) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(

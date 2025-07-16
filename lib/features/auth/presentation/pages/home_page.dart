@@ -10,12 +10,12 @@ import '../widgets/background_section.dart';
 import '../widgets/top_bar_section.dart';
 import '../widgets/welcome_section.dart';
 
-class LoginPage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -34,7 +34,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
 
-    _slideAnimation = Tween<Offset>(begin: Offset(0, 0.3), end: Offset.zero).animate(
+    _slideAnimation =
+        Tween<Offset>(begin: Offset(0, 0.3), end: Offset.zero).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
     );
 
@@ -67,7 +68,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TopBarSection(),
-                  const SizedBox(height: 340),
+                  SizedBox(
+                    height: showRegisterForm ? 170 : 300,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: WelcomeSection(

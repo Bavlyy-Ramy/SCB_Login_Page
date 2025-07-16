@@ -19,7 +19,7 @@ class WelcomeSection extends StatelessWidget {
           child: FadeTransition(
             opacity: fadeAnimation,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
+              padding: const EdgeInsets.symmetric(vertical: 4),
               child: Column(
                 children: [
                   Text(
