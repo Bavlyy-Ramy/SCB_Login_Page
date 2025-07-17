@@ -113,12 +113,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   final newUser = UserModel(
                     id: nationalIdController.text,
                     name: fullNameController.text.trim(),
-                    email: emailController.text.trim(),
-                    password: passwordController.text,
+                    encryptedEmail: emailController.text.trim(),
+                    encryptedPassword: passwordController.text,
                   );
 
-                  await UserStorageHelper.saveUser(
-                      newUser); // ✅ Save user to Hive
+                  await UserStorageHelper.saveFromEntity(newUser); // ✅ Save user to Hive
                   showSuccessDialog(); // ✅ Show success dialog
                 }
               },

@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:scb_login/features/auth/domain/entities/entites.dart';
-
+import 'package:scb_login/core/utils/crypto_helper.dart'; // <- add this
 
 part 'user_model.g.dart';
 
@@ -13,46 +13,51 @@ class UserModel extends UserEntity {
   final String name;
 
   @HiveField(2)
-  final String email;
+  final String encryptedEmail;
 
   @HiveField(3)
-  final String password;
+  final String encryptedPassword;
 
   const UserModel({
     required this.id,
     required this.name,
-    required this.email,
-    required this.password,
-  }) : super(id: id, name: name, email: email, password: password);
+    required this.encryptedEmail,
+    required this.encryptedPassword,
+  }) : super(
+            id: id,
+            name: name,
+            encryptedEmail: encryptedEmail,
+            encryptedPassword: encryptedPassword);
 
   factory UserModel.fromEntity(UserEntity entity) {
     return UserModel(
       id: entity.id,
       name: entity.name,
-      email: entity.email,
-      password: entity.password,
+      encryptedEmail: entity.encryptedEmail,
+      encryptedPassword: entity.encryptedPassword,
     );
   }
-    /// ✅ Add this
+
+  /// ✅ Add this
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'],
       name: json['name'],
-      email: json['email'],
-      password: json['password'],
+      encryptedEmail: json['email'],
+      encryptedPassword: json['password'],
     );
   }
-  UserModel copyWith({
+ UserModel copyWith({
   String? id,
   String? name,
-  String? email,
-  String? password,
+  String? encryptedEmail,
+  String? encryptedPassword,
 }) {
   return UserModel(
     id: id ?? this.id,
     name: name ?? this.name,
-    email: email ?? this.email,
-    password: password ?? this.password,
+    encryptedEmail: encryptedEmail ?? this.encryptedEmail,
+    encryptedPassword: encryptedPassword ?? this.encryptedPassword,
   );
 }
 
@@ -62,8 +67,8 @@ class UserModel extends UserEntity {
     return {
       'id': id,
       'name': name,
-      'email': email,
-      'password': password,
+      'email': encryptedEmail,
+      'password': encryptedPassword,
     };
   }
 }

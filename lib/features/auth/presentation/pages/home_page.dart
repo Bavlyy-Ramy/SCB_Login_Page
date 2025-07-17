@@ -11,6 +11,8 @@ import '../widgets/background_section.dart';
 import '../widgets/top_bar_section.dart';
 import '../widgets/welcome_section.dart';
 
+
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
