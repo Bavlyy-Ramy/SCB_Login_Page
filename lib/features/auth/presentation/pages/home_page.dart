@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scb_login/core/utils/user_storage_helper.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    checkConnectivity();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
@@ -42,6 +44,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _animationController.forward();
   }
 
+  void checkConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+  }
+
   void toggleForm() {
     setState(() {
       showRegisterForm = !showRegisterForm;
@@ -56,40 +62,70 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Stack(
-        children: [
-          BackgroundSection(),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TopBarSection(),
-                  SizedBox(
-                    height: showRegisterForm ? 170 : 300,
+    return StreamBuilder<List<ConnectivityResult>>(
+      stream: Connectivity().onConnectivityChanged,
+      builder: (context, snapshot) {
+        final results = snapshot.data ?? [];
+        final result =
+            results.isNotEmpty ? results.first : ConnectivityResult.none;
+
+        final bool hasInternet = result != ConnectivityResult.none;
+
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: Stack(
+            children: [
+              BackgroundSection(),
+              SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 40),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TopBarSection(),
+                      SizedBox(
+                        height: showRegisterForm ? 170 : 300,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: WelcomeSection(
+                          fadeAnimation: _fadeAnimation,
+                          slideAnimation: _slideAnimation,
+                        ),
+                      ),
+                      !hasInternet
+                          ? Align(
+                              alignment: Alignment.topCenter,
+                              child: Container(
+                                width: double.infinity,
+                                color: Colors.red,
+                                padding: const EdgeInsets.all(10),
+                                child: const SafeArea(
+                                  child: Text(
+                                    'No Internet Connection ❌',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : BlocProvider(
+                              create: (context) => sl<LoginCubit>(),
+                              child: showRegisterForm
+                                  ? RegisterForm(onSwitchToLogin: toggleForm)
+                                  : LoginForm(onSwitchToRegister: toggleForm),
+                            ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: WelcomeSection(
-                      fadeAnimation: _fadeAnimation,
-                      slideAnimation: _slideAnimation,
-                    ),
-                  ),
-                  BlocProvider(
-                    create: (context) => sl<LoginCubit>(),
-                    child: showRegisterForm
-                        ? RegisterForm(onSwitchToLogin: toggleForm)
-                        : LoginForm(onSwitchToRegister: toggleForm),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
